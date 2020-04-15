@@ -71,18 +71,7 @@ def setView(x, y, w, h):
     glLoadIdentity()
 
 def drawFigure(x, y, w, h):
-    setView(x, y, w, h)
-    shaders.glUseProgram(shaderProgram)
-    square.bind()
-    glEnableClientState(GL_VERTEX_ARRAY)
-    glEnableClientState(GL_COLOR_ARRAY)
-    glVertexPointer(3, GL_FLOAT, 24, square) 
-    glColorPointer(3, GL_FLOAT, 24, square+12)
-    glDrawArrays(GL_TRIANGLES, 0, 12)
-    square.unbind()
-    glDisableClientState(GL_VERTEX_ARRAY)
-    glDisableClientState(GL_COLOR_ARRAY)
-
+    
 def draw():
     global frameNum, lastTime, square, shaderProgram
 
@@ -98,8 +87,17 @@ def draw():
     glLoadIdentity()
 
 
-    drawFigure(100, 100, 100 + 50 * cos(time()*10), 100 + 50 * (sin(time()*10)))
-    drawFigure(400, 300, 50, 50)
+    setView(100, 100, 100 + 50 * cos(time()*10), 100 + 50 * (sin(time()*10)))
+    shaders.glUseProgram(shaderProgram)
+    square.bind()
+    glEnableClientState(GL_VERTEX_ARRAY)
+    glEnableClientState(GL_COLOR_ARRAY)
+    glVertexPointer(3, GL_FLOAT, 24, square) 
+    glColorPointer(3, GL_FLOAT, 24, square+12)
+    glDrawArrays(GL_TRIANGLES, 0, 12)
+    square.unbind()
+    glDisableClientState(GL_VERTEX_ARRAY)
+    glDisableClientState(GL_COLOR_ARRAY)
 
     # glBegin(GL_POLYGON)
     # glVertex3f (0, 0, 0.0)
@@ -126,7 +124,7 @@ if __name__ == '__main__':
     glLoadIdentity()
 
     
-    shaderProgram = loadShaders("shaders/vertexShader.vert", "shaders/vertexColors.frag")
+    shaderProgram = loadShaders("shaders/vertexShader.vert", "shaders/prettyGreen.frag")
 
     # happyTextureID = loadTexture("happy.png")
 
