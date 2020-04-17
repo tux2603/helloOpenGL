@@ -1,51 +1,11 @@
 
 #include <chrono>
 #include <fstream>
-#include <GL/glew.h>
 #include <GL/glut.h>
 #include <iostream>
 #include <math.h>
 #include <sstream>
 #include <string>
-
-GLuint shaderProgramID = -1;
-
-GLuint loadShaders(std::string vertexFile, std::string fragmentFile) {
-    //Create the shaders
-    GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-    // Load the vertex shader data
-    std::ifstream vertStream(vertexFile);
-    std::stringstream vertBuffer;
-    vertBuffer << vertStream.rdbuf();
-    const char *vertData = vertBuffer.str().c_str();
-    
-
-    // Load the fragment shader data
-    std::ifstream fragStream(fragmentFile);
-    std::stringstream fragBuffer;
-    fragBuffer << fragStream.rdbuf();
-    const char *fragData = fragBuffer.str().c_str();
-
-    // Compile the vertex shader
-    glShaderSource(vertShader, 1, &vertData, NULL);
-    glCompileShader(vertShader);
-
-    // Compile the fragment shader
-    glShaderSource(fragShader, 1, &fragData, NULL);
-    glCompileShader(fragShader);
-
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertShader);
-    glAttachShader(shaderProgram, fragShader);
-
-    // Delete the extra data from memory
-    glDeleteShader(vertShader);
-    glDeleteShader(fragShader);
-
-    return shaderProgram;
-}
 
 void setView(GLint x, GLint y, GLint width, GLint height) {
     glViewport(x, y, width, height);
@@ -126,9 +86,7 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
     glLoadIdentity();
 
-    glUseProgram(shaderProgramID);
-
-    drawFigure(100, 100, 100 + 50 * cos(timeNow*10), 100 + 50 * (sin(timeNow*10)));
+    drawFigure(100 + 10 * (sin(timeNow*10)), 100 + 10 * cos(timeNow*10), 100 + 50 * cos(timeNow*10), 100 + 50 * (sin(timeNow*10)));
     drawFigure(400, 300, 50, 50);
     
     setView();
@@ -150,8 +108,6 @@ int main(int argc, char **argv) {
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Hello OpenGL");
 
-    glewInit();
-    loadShaders("shaders/vertexShader.vert", "shaders/prettyGreen.frag");
     glutDisplayFunc(display);
     glutIdleFunc(display);
     glutMainLoop();
