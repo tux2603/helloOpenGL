@@ -21,43 +21,6 @@ def loadShaders(vertexFile, fragmentFile):
 
     return shaders.compileProgram(vertexShader, fragmentShader)
 
-
-def loadTexture(fileName):
-    # Try to open the file
-    try:
-        image = Image.open(fileName)
-    except:
-        print('Failed to load the image :(')
-        return -1
-
-    # Load the raw image info
-    imageData = np.array(list(image.getdata()), np.uint8)
-
-    # Get an ID that openGL will use for this image
-    textureID = glGenTextures(1)
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
-    glBindTexture(GL_TEXTURE_2D, textureID)
-
-    # Set texture wrapping configuration to tile textures that need to be extended
-    glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-    glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-
-    # Set texture scaling configuration to just be ugly un-antaliased pixels
-    glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-    glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0)
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.size[0], image.size[1],
-        0, GL_RGB, GL_UNSIGNED_BYTE, imageData)
-
-    image.close()
-    return textureID
-
 def setView(x, y, w, h):
 
     # Create and load the view matrix
